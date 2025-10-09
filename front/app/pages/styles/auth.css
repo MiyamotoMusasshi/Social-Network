@@ -1,0 +1,18 @@
+@import "./colors.css";
+
+main {
+  position: absolute;
+  width: 40vw;
+  height: 50vh;
+  left: 50%;
+  translate: -50%;
+  top: 25%;
+  display: flex;
+  gap: 5px;
+  border: 1px solid var(--auth-border-color);
+  border-radius: 10px;
+  -webkit-box-shadow: 5px 5px 23px 12px var(--auth-main-shadow-color);
+  -moz-box-shadow: 5px 5px 23px 12px var(--auth-main-shadow-color);
+  box-shadow: 5px 5px 23px 12px var(--auth-main-shadow-color);
+  background-color: var(--auth-main-background-color);
+}
