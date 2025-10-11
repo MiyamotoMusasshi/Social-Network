@@ -6,7 +6,7 @@ import {
 } from "@react-router/dev/routes";
 
 export default [
-  layout("./pages/components/auth.tsx", [
+  layout("./pages/components/authLayout.tsx", [
     route("register", "./pages/main/registration.tsx"),
   ]),
 ] satisfies RouteConfig;
