@@ -1,0 +1,13 @@
+@keyframes baseLoadingAnimation {
+  from {
+    opacity: 0;
+    top: 0%;
+  }
+  50% {
+    top: 20%;
+    opacity: 0.5;
+  }
+  to {
+    opacity: 1;
+  }
+}

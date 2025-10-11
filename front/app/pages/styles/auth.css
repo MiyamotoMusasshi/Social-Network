@@ -1,4 +1,5 @@
 @import "./colors.css";
+@import "./animation.css";
 
 main {
   position: absolute;
@@ -7,12 +8,25 @@ main {
   left: 50%;
   translate: -50%;
   top: 25%;
-  display: flex;
-  gap: 5px;
-  border: 1px solid var(--auth-border-color);
   border-radius: 10px;
   -webkit-box-shadow: 5px 5px 23px 12px var(--auth-main-shadow-color);
   -moz-box-shadow: 5px 5px 23px 12px var(--auth-main-shadow-color);
   box-shadow: 5px 5px 23px 12px var(--auth-main-shadow-color);
   background-color: var(--auth-main-background-color);
+  animation-name: baseLoadingAnimation;
+  animation-duration: 2s;
+  animation-iteration-count: initial;
+}
+main,
+button {
+  border: 1px solid var(--auth-border-color);
+}
+button {
+  border-radius: 4px;
+  &&:hover {
+    opacity: 0.7;
+  }
+}
+a:hover {
+  opacity: 0.7;
 }
