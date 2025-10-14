@@ -1,13 +1,20 @@
-import React from "react";
+import Submit from "../UI/Submit";
+import { handleSubmit } from "~/api/handleSubmit";
 
 export default function AuthFactory({
   resources,
   textParagraph,
   textBtn,
   textA,
+  action,
 }: AuthFactoryProps) {
   return (
-    <form className="w-ful">
+    <form
+      className="w-ful"
+      onSubmit={(e) => {
+        handleSubmit(e, action);
+      }}
+    >
       <div className="flex p-10 flex-col w-full h-full">
         <p className="text-4xl mb-[40px] mx-auto">{textParagraph}</p>
         <div className="flex flex-col mx-auto">
@@ -18,12 +25,10 @@ export default function AuthFactory({
               className="flex flex-col mb-[10px]"
             >
               <span className="text-xl">{text}</span>
-              <input type={type} placeholder={placeholder} />
+              <input type={type} placeholder={placeholder} name={placeholder} />
             </label>
           ))}
-          <button className="cursor-pointer text-base mt-[10px]">
-            {textBtn}
-          </button>
+          <Submit textBtn={textBtn} />
           <a href="" className="mx-auto mt-[10px] text-sm">
             {textA}
           </a>
@@ -46,4 +51,5 @@ type AuthFactoryProps = {
   textParagraph: string;
   textBtn: string;
   textA: string;
+  action: string;
 };

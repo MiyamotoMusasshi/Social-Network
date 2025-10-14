@@ -7,6 +7,7 @@ export default function Registration() {
       textParagraph="Registration"
       textBtn="Register"
       textA="no account?"
+      action="http://localhost:5000/register"
     />
   );
 }
@@ -38,6 +39,6 @@ const resources = [
     htmlFor: "Return Password",
     text: "Please Return Password",
     type: "password",
-    placeholder: "return password",
+    placeholder: "return_password",
   },
 ];
