@@ -1,5 +1,6 @@
 import Submit from "../UI/Submit";
 import { handleSubmit } from "~/api/handleSubmit";
+import { useFetcher } from "react-router";
 
 export default function AuthFactory({
   resources,
@@ -8,8 +9,9 @@ export default function AuthFactory({
   textA,
   action,
 }: AuthFactoryProps) {
+  let fetcher = useFetcher();
   return (
-    <form
+    <fetcher.Form
       className="w-ful"
       onSubmit={(e) => {
         handleSubmit(e, action);
@@ -34,7 +36,7 @@ export default function AuthFactory({
           </a>
         </div>
       </div>
-    </form>
+    </fetcher.Form>
   );
 }
 

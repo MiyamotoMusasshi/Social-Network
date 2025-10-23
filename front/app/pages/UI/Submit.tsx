@@ -2,7 +2,7 @@ import { useFormStatus } from "react-dom";
 
 export default function Submit({ textBtn }: SubmitProps) {
   const { pending } = useFormStatus();
-  console.log(pending);
+
   return (
     <button
       type="submit"

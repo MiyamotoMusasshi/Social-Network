@@ -1,8 +1,6 @@
 import app from "./app.ts";
+import registration from "./posts/registration.ts";
 
-app.post("/register", (req, res) => {
-  console.log(req.body);
-  setTimeout(() => res.json({ user: "lox" }), 10000);
-});
+app.post("/register", registration);
 
 export default app.post;
