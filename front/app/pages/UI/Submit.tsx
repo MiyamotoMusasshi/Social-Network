@@ -1,19 +1,16 @@
-import { useFormStatus } from "react-dom";
-
-export default function Submit({ textBtn }: SubmitProps) {
-  const { pending } = useFormStatus();
-
+export default function Submit({ textBtn, disabled }: SubmitProps) {
   return (
     <button
       type="submit"
       className="cursor-pointer text-base mt-[10px]"
-      disabled={pending}
+      disabled={disabled}
     >
-      {pending ? "Loading..." : textBtn}
+      {disabled ? "Loading..." : textBtn}
     </button>
   );
 }
 
 type SubmitProps = {
   textBtn: string;
+  disabled: boolean;
 };

@@ -2,13 +2,16 @@ import axios from "axios";
 
 export const handleSubmit = async (
   e: React.FormEvent<HTMLFormElement>,
-  action: string
+  action: string,
+  returnData: (data: any) => void,
+  disabledButton: (isDisabled: any) => void
 ) => {
   e.preventDefault();
 
   const formData = new FormData(e.target as HTMLFormElement);
   const sendFormData = JSON.stringify(Object.fromEntries(formData));
-  console.log(sendFormData);
+
+  disabledButton(true);
   axios
     .post(action, sendFormData, {
       headers: {
@@ -16,7 +19,8 @@ export const handleSubmit = async (
       },
     })
     .then((response) => {
-      console.log(response.data);
+      returnData(response.data.error ? response.data.error : "");
+      disabledButton(false);
     })
     .catch((error) => {
       console.log(error);

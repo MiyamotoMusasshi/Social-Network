@@ -15,6 +15,8 @@ export default function AuthFactory({
   const [countSymbol, setCountSymbol] = useState<number[]>(
     new Array(resources.length).fill(0)
   );
+  const [serverData, setServerData] = useState();
+  const [disabled, setDisabled] = useState(false);
   const updateCount = (index: number, newValue: number) => {
     setCountSymbol((prev) => {
       const cloneArray = [...prev];
@@ -26,7 +28,16 @@ export default function AuthFactory({
     <fetcher.Form
       className="w-ful"
       onSubmit={(e) => {
-        handleSubmit(e, action);
+        handleSubmit(
+          e,
+          action,
+          (data) => {
+            setServerData(data);
+          },
+          (isDisabled) => {
+            setDisabled(isDisabled);
+          }
+        );
       }}
     >
       <div className="flex p-10 flex-col w-full h-full">
@@ -53,11 +64,12 @@ export default function AuthFactory({
               </span>
             </label>
           ))}
-          <Submit textBtn={textBtn} />
+          <Submit textBtn={textBtn} disabled={disabled} />
           <a href="" className="mx-auto mt-[10px] text-sm">
             {textA}
           </a>
         </div>
+        <p className="mx-auto text-lg mt-[10px] text-red-600">{serverData}</p>
       </div>
     </fetcher.Form>
   );
