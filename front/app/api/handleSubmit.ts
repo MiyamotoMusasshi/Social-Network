@@ -4,7 +4,8 @@ export const handleSubmit = async (
   e: React.FormEvent<HTMLFormElement>,
   action: string,
   returnData: (data: any) => void,
-  disabledButton: (isDisabled: any) => void
+  disabledButton: (isDisabled: any) => void,
+  activityConfirmEmailCode: (isConfirmCode: any) => void
 ) => {
   e.preventDefault();
 
@@ -21,6 +22,7 @@ export const handleSubmit = async (
     .then((response) => {
       returnData(response.data.error ? response.data.error : "");
       disabledButton(false);
+      activityConfirmEmailCode(response.data.register);
     })
     .catch((error) => {
       console.log(error);

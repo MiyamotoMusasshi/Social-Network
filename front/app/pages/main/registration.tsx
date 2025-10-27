@@ -8,6 +8,7 @@ export default function Registration() {
       textBtn="Register"
       textA="no account?"
       action="http://localhost:5000/register"
+      href="/register"
     />
   );
 }

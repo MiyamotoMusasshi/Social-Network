@@ -13,4 +13,5 @@ export type AuthFactoryProps = {
   textBtn: string;
   textA: string;
   action: string;
+  href: string;
 };

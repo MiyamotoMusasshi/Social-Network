@@ -10,7 +10,7 @@ export default async function registration(
   const email = request.body.username;
   const password = request.body.password;
   const returnPassword = request.body.return_password;
-
+  console.log(request.body);
   const chekedEmail = await check("users", "email", "email", email);
 
   if (username.length < 5) {
@@ -27,7 +27,7 @@ export default async function registration(
     });
   } else {
     responce.json({
-      noerror: "",
+      register: true,
     });
   }
 }
