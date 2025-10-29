@@ -6,9 +6,9 @@ export default function Registration() {
       resources={resources}
       textParagraph="Registration"
       textBtn="Register"
-      textA="no account?"
+      textA="Do you have an account?"
       action="http://localhost:5000/register"
-      href="/register"
+      href="/login"
     />
   );
 }
