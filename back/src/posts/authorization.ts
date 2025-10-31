@@ -6,8 +6,7 @@ export default async function authorization(
   request: Request,
   responce: Response
 ) {
-  const email = request.body.username;
-  const password = request.body.password;
+  const { email, password } = request.body;
 
   const chekedEmail = await check("users", "email", "email", email);
   const chekedPassword = await check("users", "password", "email", password);

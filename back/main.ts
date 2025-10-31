@@ -1,16 +1,17 @@
 import dotenv from "dotenv";
-import webscoketServer from "./src/websocket.ts";
+import websocketServer from "./src/websocket.ts";
 import httpServer from "./src/httpServer.ts";
 import connection from "./src/database.ts";
 import post from "./src/post.ts";
 import database from "./src/database.ts";
+import { redisClient } from "./src/redis.ts";
 
 dotenv.config();
 
 const PORT = process.env.PORT;
 
-webscoketServer.on("connection", (webscoketMsg) => {
-  webscoketMsg.send("connect");
+websocketServer.on("connection", (websocketMsg) => {
+  websocketMsg.send("connect");
 });
 
 httpServer.listen(PORT, () => {
@@ -24,3 +25,12 @@ database.connect((err) => {
     console.log("Подключено к MySQL!");
   }
 });
+
+redisClient.on("error", (err) => console.log("Redis Client Error", err));
+
+await redisClient
+  .connect()
+  .then(() => {
+    console.log("connected Redis");
+  })
+  .catch((err) => console.log(err));
