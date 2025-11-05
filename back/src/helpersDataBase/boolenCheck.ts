@@ -10,12 +10,16 @@ export default async function check(
     database.query(
       `SELECT ${column} FROM ${table} WHERE ${byColumn} = ?`,
       [value],
-      (err, row: any[]) => {
+      (err, row: []) => {
         if (err) {
           console.error(err);
           reject(err);
         }
-        resolve(row[0]);
+        if (row.length != 0) {
+          resolve(true);
+        } else {
+          resolve(false);
+        }
       }
     );
   });

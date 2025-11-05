@@ -9,6 +9,10 @@ import {
 
 import type { Route } from "./+types/root";
 import "./app.css";
+import { useEffect } from "react";
+import { useNavigate } from "react-router";
+import Cookies from "js-cookie";
+import axios from "axios";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -44,6 +48,32 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
+  const navigate = useNavigate();
+  useEffect(() => {
+    const cookie = Cookies.get("token");
+    if (cookie == undefined && window.location.pathname != "/login") {
+      navigate("/register");
+    } else {
+      axios
+        .post(
+          "http://localhost:5000/check-cookie",
+          { cookie: cookie },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((responce) => {
+          !responce.data.verify
+            ? navigate("/register")
+            : window.location.pathname == "/login" ||
+                window.location.pathname == "/register"
+              ? (window.location.pathname = "/")
+              : "";
+        });
+    }
+  }, []);
   return <Outlet />;
 }
 

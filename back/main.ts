@@ -10,9 +10,9 @@ dotenv.config();
 
 const PORT = process.env.PORT;
 
-websocketServer.on("connection", (websocketMsg) => {
-  websocketMsg.send("connect");
-});
+// websocketServer.on("connection", (websocketMsg) => {
+//   websocketMsg.send("connect");
+// });
 
 httpServer.listen(PORT, () => {
   console.log("http server started");

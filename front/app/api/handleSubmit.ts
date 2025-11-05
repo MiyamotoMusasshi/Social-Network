@@ -1,4 +1,5 @@
 import axios from "axios";
+import Cookies from "js-cookie";
 
 export const handleSubmit = async (
   e: React.FormEvent<HTMLFormElement>,
@@ -23,6 +24,9 @@ export const handleSubmit = async (
       returnData(response.data.error ? response.data.error : "");
       disabledButton(false);
       activityConfirmEmailCode(response.data.register);
+      response.data.noerror
+        ? Cookies.set("token", response.data.noerror, { expires: 365 })
+        : "";
     })
     .catch((error) => {
       console.log(error);
