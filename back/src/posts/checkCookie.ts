@@ -12,7 +12,6 @@ export default async function checkCookie(
   responce: Response
 ) {
   const token = request.body.cookie;
-
   jwt.verify(token, secret, (err: any, decoded: any) => {
     if (err) {
       console.error(err);

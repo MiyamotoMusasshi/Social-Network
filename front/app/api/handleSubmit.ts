@@ -24,9 +24,11 @@ export const handleSubmit = async (
       returnData(response.data.error ? response.data.error : "");
       disabledButton(false);
       activityConfirmEmailCode(response.data.register);
-      response.data.noerror
-        ? Cookies.set("token", response.data.noerror, { expires: 365 })
-        : "";
+      if (response.data.noerror) {
+        Cookies.set("token", response.data.noerror, { expires: 365 });
+        Cookies.set("UID", response.data.uid, { expires: 365 });
+        document.location.href = "/";
+      }
     })
     .catch((error) => {
       console.log(error);

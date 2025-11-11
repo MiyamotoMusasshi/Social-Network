@@ -1,12 +1,18 @@
 import "app/pages/styles/navigate.css";
+import Cookies from "js-cookie";
+import { useEffect, useState } from "react";
 
 export default function Navigate() {
+  const [uid, setUid] = useState<string | undefined>(undefined);
+  useEffect(() => {
+    setUid(Cookies.get("UID"));
+  }, []);
   return (
     <nav>
       <ul>
         {links.map(({ href, to, key }) => (
           <li key={key} className="mb-[10px]">
-            <a href={href} className="text-2xl">
+            <a href={key == 0 ? href + uid : href} className="text-xl">
               {to}
             </a>
           </li>
@@ -18,7 +24,7 @@ export default function Navigate() {
 
 const links = [
   {
-    href: "/",
+    href: `/profile/`,
     to: "Profile",
     key: 0,
   },

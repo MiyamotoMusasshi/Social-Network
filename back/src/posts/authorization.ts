@@ -43,6 +43,7 @@ export default async function authorization(
 
       responce.json({
         noerror: token,
+        uid: UID.id,
       });
     }
   }

@@ -9,10 +9,11 @@ import {
 
 import type { Route } from "./+types/root";
 import "./app.css";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import Cookies from "js-cookie";
 import axios from "axios";
+import { useCustomFetch } from "./hooks/useCustomFetch";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -48,32 +49,25 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  const navigate = useNavigate();
+  // const navigate = useNavigate(); - ruin
+  const { data, loading, error } = useCustomFetch(
+    "http://localhost:5000/check-cookie",
+    { cookie: Cookies.get("token") }
+  );
   useEffect(() => {
-    const cookie = Cookies.get("token");
-    if (cookie == undefined && window.location.pathname != "/login") {
-      navigate("/register");
-    } else {
-      axios
-        .post(
-          "http://localhost:5000/check-cookie",
-          { cookie: cookie },
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        )
-        .then((responce) => {
-          !responce.data.verify
-            ? navigate("/register")
-            : window.location.pathname == "/login" ||
-                window.location.pathname == "/register"
-              ? (window.location.pathname = "/")
-              : "";
-        });
+    if (!loading && data) {
+      if (data.verify == false && window.location.pathname != "/login") {
+        window.location.pathname = "/register";
+      }
+      if (
+        data.verify == true &&
+        (window.location.pathname == "/login" ||
+          window.location.pathname == "/register")
+      ) {
+        window.location.pathname = "/";
+      }
     }
-  }, []);
+  }, [loading, data]);
   return <Outlet />;
 }
 

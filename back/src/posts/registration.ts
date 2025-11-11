@@ -74,6 +74,7 @@ export default async function registration(
 
       responce.json({
         noerror: token,
+        uid: UID,
       });
     } else {
       responce.json({
