@@ -3,9 +3,12 @@ import Navigate from "../UI/Navigate";
 import MainBtn from "../UI/MainBtn";
 import MainBtnAlt from "../UI/MainBtnAlt";
 import "app/pages/styles/profile.css";
+import Cookies from "js-cookie";
 
 export default function Profile() {
   const { userId } = useParams();
+  Cookies.remove("token");
+  Cookies.remove("UID");
   return (
     <div>
       <Navigate />
@@ -27,8 +30,8 @@ export default function Profile() {
               <p className="text-sm text-gray-500">Following: 21k</p>
             </div>
             <div className="mt-[20px] gap-[10px] flex">
-              <MainBtnAlt textBtn="Follow" />
-              <MainBtn textBtn="message" />
+              <MainBtnAlt textBtn="Follow" colorBtn="white" />
+              <MainBtn textBtn="message" colorBtn="white" />
             </div>
           </div>
         </div>

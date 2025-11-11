@@ -1,9 +1,10 @@
 import "app/pages/styles/main-btn.css";
 
-export default function MainBtn({ textBtn }: MainBtnProps) {
-  return <button className="main">{textBtn}</button>;
+export default function MainBtn({ textBtn, colorBtn }: MainBtnProps) {
+  return <button className={`bg-[${colorBtn}] main`}>{textBtn}</button>;
 }
 
 type MainBtnProps = {
   textBtn: string;
+  colorBtn: string;
 };

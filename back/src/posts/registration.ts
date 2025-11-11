@@ -10,6 +10,7 @@ import dotenv from "dotenv";
 import bcrypt from "bcryptjs";
 import generationUID from "../helpersDataBase/generationUID.ts";
 import push from "../helpersDataBase/push.ts";
+import database from "../database.ts";
 
 dotenv.config();
 
@@ -71,6 +72,14 @@ export default async function registration(
         "http://localhost:5000/img/avatar.png",
         "your info",
       ]);
+
+      database.query(
+        `CREATE TABLE \`${UID.toString()}\` (followers VARCHAR(50), following VARCHAR(50))`,
+        (err, res) => {
+          if (err) console.error(err);
+          console.log(res);
+        }
+      );
 
       responce.json({
         noerror: token,

@@ -54,9 +54,14 @@ export default function App() {
     "http://localhost:5000/check-cookie",
     { cookie: Cookies.get("token") }
   );
+
   useEffect(() => {
     if (!loading && data) {
-      if (data.verify == false && window.location.pathname != "/login") {
+      if (
+        data.verify == false &&
+        window.location.pathname != "/login" &&
+        window.location.pathname != "/register"
+      ) {
         window.location.pathname = "/register";
       }
       if (
@@ -67,7 +72,7 @@ export default function App() {
         window.location.pathname = "/";
       }
     }
-  }, [loading, data]);
+  }, [data]);
   return <Outlet />;
 }
 

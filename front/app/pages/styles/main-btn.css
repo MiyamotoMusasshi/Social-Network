@@ -11,10 +11,5 @@ button {
   }
 }
 .main {
-  background-color: white;
   color: black;
-}
-.alt {
-  border: 1px solid white;
-  color: white;
 }

@@ -12,12 +12,21 @@ export default async function checkCookie(
   responce: Response
 ) {
   const token = request.body.cookie;
-  jwt.verify(token, secret, (err: any, decoded: any) => {
-    if (err) {
-      console.error(err);
-    }
-    check("users", "email", "id", decoded.id).then((emailFromDataBase) => {
-      responce.json({ verify: emailFromDataBase.email == decoded.email });
+
+  if (token == undefined) {
+    responce.json({ verify: false });
+  } else {
+    jwt.verify(token, secret, (err: any, decoded: any) => {
+      if (err) {
+        console.error(err);
+      }
+      check("users", "email", "id", decoded.id).then((emailFromDataBase) => {
+        responce.json({
+          verify: emailFromDataBase
+            ? emailFromDataBase.email == decoded.email
+            : false,
+        });
+      });
     });
-  });
+  }
 }

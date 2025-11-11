@@ -28,7 +28,10 @@ export default async function sendEmailCode(recipient: string) {
     text: `Your confirmation code: ${code} `,
   };
 
-  await trasporter.sendMail(mailOptions);
+  trasporter.sendMail(mailOptions, (err, info) => {
+    if (err) console.log(err);
+    console.log(info);
+  });
 
   return code;
 }
