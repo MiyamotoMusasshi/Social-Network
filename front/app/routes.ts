@@ -7,7 +7,7 @@ import {
 
 export default [
   index("./pages/main/main.tsx"),
-  route("/profile/:userId", "./pages/main/profile.tsx"),
+  route("/profile/:userIdFromUrl", "./pages/main/profile.tsx"),
   layout("./pages/components/authLayout.tsx", [
     route("register", "./pages/main/registration.tsx"),
     route("login", "./pages/main/authorization.tsx"),

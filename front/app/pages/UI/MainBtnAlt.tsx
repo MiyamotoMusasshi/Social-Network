@@ -1,8 +1,12 @@
 import "app/pages/styles/main-btn.css";
 
-export default function MainBtn({ textBtn, colorBtn }: MainBtnProps) {
+export default function MainBtn({ textBtn, colorBtn, onClick }: MainBtnProps) {
   return (
-    <button className={`border-${colorBtn}-600 border-soild border`}>
+    <button
+      className="border-soild border alt"
+      style={{ borderColor: colorBtn }}
+      onClick={onClick}
+    >
       {textBtn}
     </button>
   );
@@ -11,4 +15,5 @@ export default function MainBtn({ textBtn, colorBtn }: MainBtnProps) {
 type MainBtnProps = {
   textBtn: string;
   colorBtn: string;
+  onClick: () => void;
 };

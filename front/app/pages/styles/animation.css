@@ -11,3 +11,11 @@
     opacity: 1;
   }
 }
+@keyframes bounce {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-15px);
+  }
+}
