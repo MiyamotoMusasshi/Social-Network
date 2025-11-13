@@ -4,6 +4,7 @@ import { useFetcher } from "react-router";
 import { Activity, useState } from "react";
 import type { AuthFactoryProps } from "../props/AuthFactoryProps";
 import ConfirmEmailCode from "../UI/ConfirmEmailCode";
+import Loading from "../UI/Loading";
 
 export default function AuthFactory({
   resources,
@@ -71,7 +72,13 @@ export default function AuthFactory({
                 </span>
               </label>
             ))}
-            <Submit textBtn={textBtn} disabled={disabled} />
+            <div className="flex justify-center items-center w-full">
+              {!disabled ? (
+                <Submit textBtn={textBtn} disabled={disabled} />
+              ) : (
+                <Loading />
+              )}
+            </div>
             <a href={href} className="mx-auto mt-[10px] text-sm">
               {textA}
             </a>

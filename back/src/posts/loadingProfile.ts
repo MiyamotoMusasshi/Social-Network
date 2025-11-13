@@ -9,6 +9,7 @@ export default async function loadingProfile(
   const UID = request.body.id;
 
   const isUser = await boolenCheck("users", "id", "id", UID);
+
   if (isUser) {
     const { avatar, username, info, followers, following } = await check(
       "users",
@@ -17,12 +18,20 @@ export default async function loadingProfile(
       UID
     );
 
+    const isFollwer = await boolenCheck(
+      "`" + UID + "`",
+      "followers",
+      "followers",
+      request.body.user
+    );
+
     responce.json({
       avatar: avatar,
       username: username,
       info: info,
       followers: followers,
       following: following,
+      isFollower: isFollwer,
     });
   } else {
     responce.json({ NotUser: true });

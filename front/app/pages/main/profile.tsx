@@ -7,15 +7,27 @@ import Cookies from "js-cookie";
 import "app/pages/styles/profile.css";
 import { useCustomFetch } from "~/hooks/useCustomFetch";
 import Loading from "../UI/Loading";
+import { noResponseFetch } from "~/api/noResponseFetch";
+import { useState, useEffect } from "react";
 
 export default function Profile() {
   const { userIdFromUrl } = useParams();
+
+  const [isFollower, setIsFollower] = useState(false);
+  const [countFollowers, setCountFollowers] = useState(0);
+
   const { data, loading } = useCustomFetch(
     "http://localhost:5000/loading-profile",
     {
       id: userIdFromUrl,
+      user: Cookies.get("UID"),
     }
   );
+
+  useEffect(() => {
+    setIsFollower(data ? data.isFollower : false);
+    setCountFollowers(data ? data.followers : 0);
+  }, [data]);
 
   return (
     <div>
@@ -60,9 +72,7 @@ export default function Profile() {
                 {!loading ? (
                   <a className="text-sm text-gray-500 cursor-pointer hover:opacity-[0.7]">
                     Followers:
-                    {data && data.followers != null
-                      ? "" + data.followers
-                      : " 0"}
+                    {countFollowers}
                   </a>
                 ) : (
                   <Loading />
@@ -81,9 +91,27 @@ export default function Profile() {
               <div className="mt-[20px] gap-[10px] flex">
                 {Cookies.get("UID") != userIdFromUrl ? (
                   <MainBtnAlt
-                    textBtn="Follow"
+                    textBtn={isFollower ? "unFollow" : "Follow"}
                     colorBtn="white"
-                    onClick={() => {}}
+                    onClick={
+                      !isFollower
+                        ? () => {
+                            noResponseFetch("http://localhost:5000/follow", {
+                              forFollow: userIdFromUrl,
+                              newFollowers: Cookies.get("UID"),
+                            });
+                            setIsFollower(true);
+                            setCountFollowers(countFollowers + 1);
+                          }
+                        : () => {
+                            noResponseFetch("http://localhost:5000/un-follow", {
+                              unFollow: userIdFromUrl,
+                              leftFollowers: Cookies.get("UID"),
+                            });
+                            setIsFollower(false);
+                            setCountFollowers(countFollowers - 1);
+                          }
+                    }
                   />
                 ) : (
                   <MainBtnAlt
