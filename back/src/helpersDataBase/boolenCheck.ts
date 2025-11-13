@@ -4,7 +4,7 @@ export default async function check(
   table: string,
   column: string,
   byColumn: string,
-  value: string | number
+  value: string | number | null
 ): Promise<any> {
   return new Promise((resolve, reject) => {
     database.query(

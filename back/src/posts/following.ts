@@ -1,14 +1,20 @@
 import push from "../helpersDataBase/push.ts";
 import deleteStr from "../helpersDataBase/deleteStr.ts";
+import database from "../database.ts";
 import editValue from "../helpersDataBase/editValue.ts";
 import check from "../helpersDataBase/check.ts";
 import type { Request, Response } from "express";
+import boolenCheck from "../helpersDataBase/boolenCheck.ts";
 
 export class Following {
   static async follow(request: Request, responce: Response) {
     const { forFollow, newFollowers } = request.body;
 
-    push("`" + forFollow + "`", ["followers"], [newFollowers]);
+    push(
+      "follow",
+      ["uidOnFollow,uidWhoFollow"],
+      [Number(forFollow), Number(newFollowers)]
+    );
 
     const lastCountFollowers = await check(
       "users",
@@ -45,7 +51,9 @@ export class Following {
   static async unFollow(request: Request, responce: Response) {
     const { unFollow, leftFollowers } = request.body;
 
-    deleteStr("`" + unFollow + "`", "followers", leftFollowers);
+    database.query(
+      `DELETE FROM follow WHERE uidOnFollow=${unFollow} AND uidWhoFollow=${leftFollowers}`
+    );
 
     const lastCountFollowers = await check(
       "users",

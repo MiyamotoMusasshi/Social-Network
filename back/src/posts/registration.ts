@@ -73,14 +73,6 @@ export default async function registration(
         "your info",
       ]);
 
-      database.query(
-        `CREATE TABLE \`${UID.toString()}\` (followers VARCHAR(50), following VARCHAR(50))`,
-        (err, res) => {
-          if (err) console.error(err);
-          console.log(res);
-        }
-      );
-
       responce.json({
         noerror: token,
         uid: UID,

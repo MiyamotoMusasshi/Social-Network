@@ -9,12 +9,18 @@ import { useCustomFetch } from "~/hooks/useCustomFetch";
 import Loading from "../UI/Loading";
 import { noResponseFetch } from "~/api/noResponseFetch";
 import { useState, useEffect } from "react";
+import { editAvatar } from "~/api/editAvatar";
+import { editProfile } from "~/api/editProfile";
 
 export default function Profile() {
   const { userIdFromUrl } = useParams();
 
   const [isFollower, setIsFollower] = useState(false);
   const [countFollowers, setCountFollowers] = useState(0);
+  const [isEditUsername, setIsEditUsername] = useState(false);
+  const [isEditInfo, setIsEditInfo] = useState(false);
+  const [username, setUsername] = useState("");
+  const [info, setInfo] = useState("");
 
   const { data, loading } = useCustomFetch(
     "http://localhost:5000/loading-profile",
@@ -26,7 +32,9 @@ export default function Profile() {
 
   useEffect(() => {
     setIsFollower(data ? data.isFollower : false);
-    setCountFollowers(data ? data.followers : 0);
+    setCountFollowers(data ? (data.followers == null ? 0 : data.followers) : 0);
+    setUsername(data ? data.username : "");
+    setInfo(data ? data.info : "");
   }, [data]);
 
   return (
@@ -44,35 +52,91 @@ export default function Profile() {
               ) : (
                 <Loading />
               )}
-              {Cookies.get("UID") == userIdFromUrl ? <ChangingBtn /> : null}
+              {Cookies.get("UID") == userIdFromUrl ? (
+                <ChangingBtn
+                  onClick={() => {
+                    editAvatar();
+                  }}
+                />
+              ) : null}
             </div>
             <div className="flex p-10  pt-[20px] flex-col w-full h-full items-center">
               <div className="flex gap-[10px] mt-[10px] justify-center">
                 {!loading ? (
-                  <p className="texl-2xl">
-                    {data != null ? data.username : ""}
-                  </p>
+                  !isEditUsername ? (
+                    <p className="texl-2xl">{username}</p>
+                  ) : (
+                    <input
+                      type="text"
+                      placeholder="new username"
+                      maxLength={50}
+                      onKeyDown={(e) => {
+                        let resultFunc = editProfile(
+                          5,
+                          e,
+                          "http://localhost:5000/change-profile",
+                          "username"
+                        );
+
+                        setIsEditUsername(resultFunc.isEdit);
+                        setUsername(resultFunc?.value);
+                      }}
+                    />
+                  )
                 ) : (
                   <Loading />
                 )}
-                {Cookies.get("UID") == userIdFromUrl ? <ChangingBtn /> : null}
+                {Cookies.get("UID") == userIdFromUrl ? (
+                  !isEditUsername ? (
+                    <ChangingBtn
+                      onClick={() => {
+                        setIsEditUsername(true);
+                      }}
+                    />
+                  ) : null
+                ) : null}
               </div>
               <span className="text-gray-400 text-xs">
                 uid: {userIdFromUrl}
               </span>
               <div className="flex gap-[10px] items-center mt-[10px]">
                 {!loading ? (
-                  <p className="text-sm">{data != null ? data.info : ""}</p>
+                  !isEditInfo ? (
+                    <p className="text-sm">{info}</p>
+                  ) : (
+                    <input
+                      type="text"
+                      placeholder="Tell us about yourself"
+                      maxLength={200}
+                      onKeyDown={(e) => {
+                        let resultFunc = editProfile(
+                          1,
+                          e,
+                          "http://localhost:5000/change-profile",
+                          "info"
+                        );
+                        setIsEditInfo(resultFunc.isEdit);
+                        setInfo(resultFunc?.value);
+                      }}
+                    />
+                  )
                 ) : (
                   <Loading />
                 )}
-                {Cookies.get("UID") == userIdFromUrl ? <ChangingBtn /> : null}
+                {Cookies.get("UID") == userIdFromUrl ? (
+                  !isEditInfo ? (
+                    <ChangingBtn
+                      onClick={() => {
+                        setIsEditInfo(true);
+                      }}
+                    />
+                  ) : null
+                ) : null}
               </div>
               <div className="mt-[10px] flex gap-[20px] items-center jusify-center">
                 {!loading ? (
                   <a className="text-sm text-gray-500 cursor-pointer hover:opacity-[0.7]">
-                    Followers:
-                    {countFollowers}
+                    Followers: {" " + countFollowers}
                   </a>
                 ) : (
                   <Loading />
@@ -96,18 +160,26 @@ export default function Profile() {
                     onClick={
                       !isFollower
                         ? () => {
-                            noResponseFetch("http://localhost:5000/follow", {
-                              forFollow: userIdFromUrl,
-                              newFollowers: Cookies.get("UID"),
-                            });
+                            noResponseFetch(
+                              "http://localhost:5000/follow",
+                              {
+                                forFollow: userIdFromUrl,
+                                newFollowers: Cookies.get("UID"),
+                              },
+                              false
+                            );
                             setIsFollower(true);
                             setCountFollowers(countFollowers + 1);
                           }
                         : () => {
-                            noResponseFetch("http://localhost:5000/un-follow", {
-                              unFollow: userIdFromUrl,
-                              leftFollowers: Cookies.get("UID"),
-                            });
+                            noResponseFetch(
+                              "http://localhost:5000/un-follow",
+                              {
+                                unFollow: userIdFromUrl,
+                                leftFollowers: Cookies.get("UID"),
+                              },
+                              false
+                            );
                             setIsFollower(false);
                             setCountFollowers(countFollowers - 1);
                           }
