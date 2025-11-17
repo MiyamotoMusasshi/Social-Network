@@ -1,12 +1,14 @@
 import type { Request, Response } from "express";
 import check from "../helpersDataBase/check.ts";
 import boolenCheck from "../helpersDataBase/boolenCheck.ts";
+import boolenCheckMoreCondition from "../helpersDataBase/boolenCheckMoreCondition.ts";
 
 export default async function loadingProfile(
   request: Request,
   responce: Response
 ) {
   const UID = request.body.id;
+  const user = request.body.user;
 
   const isUser = await boolenCheck("users", "id", "id", UID);
 
@@ -18,11 +20,11 @@ export default async function loadingProfile(
       UID
     );
 
-    const isFollwer = await boolenCheck(
-      "`" + UID + "`",
-      "followers",
-      "followers",
-      request.body.user
+    const isFollower = await boolenCheckMoreCondition(
+      "follow",
+      "uidOnFollow",
+      ["uidOnFollow", "uidWhoFollow"],
+      [UID, user]
     );
 
     responce.json({
@@ -31,7 +33,7 @@ export default async function loadingProfile(
       info: info,
       followers: followers,
       following: following,
-      isFollower: isFollwer,
+      isFollower: isFollower,
     });
   } else {
     responce.json({ NotUser: true });

@@ -8,9 +8,13 @@ export function editAvatar() {
   fileInput.name = "avatar";
 
   fileInput.addEventListener("change", (e: any) => {
-    const fileAvatar: Blob = e.target.files[0];
+    const fileAvatar = e.target.files[0];
 
-    if (fileAvatar) {
+    if (
+      fileAvatar &&
+      (fileAvatar.name.split(".").at(-1) == "png" ||
+        fileAvatar.name.split(".").at(-1) == "jpg")
+    ) {
       const formData = new FormData();
 
       formData.append("avatar", fileAvatar, `avatar${Cookies.get("UID")}.png`);

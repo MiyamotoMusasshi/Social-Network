@@ -17,9 +17,14 @@ export default async function changeAvatar(
 
   const lastAvatar = await check("users", "avatar", "id", Number(UID));
 
-  fs.unlink(path.join(uploadFolder, lastAvatar.avatar.substring(26)), (err) => {
-    console.error(err);
-  });
+  if (lastAvatar != "http://localhost:5000/img/avatar.png") {
+    fs.unlink(
+      path.join(uploadFolder, lastAvatar.avatar.substring(26)),
+      (err) => {
+        console.error(err);
+      }
+    );
+  }
 
   editValue(
     "users",

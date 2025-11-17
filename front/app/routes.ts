@@ -12,4 +12,7 @@ export default [
     route("register", "./pages/main/registration.tsx"),
     route("login", "./pages/main/authorization.tsx"),
   ]),
+  route("/chats", "./pages/main/chats.tsx", [
+    route("/chats/:userId", "./pages/main/chat.tsx"),
+  ]),
 ] satisfies RouteConfig;

@@ -11,7 +11,7 @@ export default function Navigate() {
     <nav>
       <ul>
         {links.map(({ href, to, key }) => (
-          <li key={key} className="mb-[10px]">
+          <li key={key} className="mb-[10px] hover:opacity-[0.7]">
             <a href={key == 0 ? href + uid : href} className="text-xl">
               {to}
             </a>
@@ -34,7 +34,7 @@ const links = [
     key: 1,
   },
   {
-    href: "/",
+    href: "/chats",
     to: "Chats",
     key: 2,
   },
