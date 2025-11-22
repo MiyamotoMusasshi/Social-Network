@@ -13,6 +13,6 @@ export default [
     route("login", "./pages/main/authorization.tsx"),
   ]),
   route("/chats", "./pages/main/chats.tsx", [
-    route("/chats/:userId", "./pages/main/chat.tsx"),
+    route("/chats/:userIdFromUrl", "./pages/main/chat.tsx"),
   ]),
 ] satisfies RouteConfig;

@@ -7,10 +7,10 @@ import Cookies from "js-cookie";
 import "app/pages/styles/profile.css";
 import { useCustomFetch } from "~/hooks/useCustomFetch";
 import Loading from "../UI/Loading";
-import { noResponseFetch } from "~/api/noResponseFetch";
+import { noResponseFetch } from "~/helpers/api/noResponseFetch";
 import { useState, useEffect } from "react";
-import { editAvatar } from "~/api/editAvatar";
-import { editProfile } from "~/api/editProfile";
+import { editAvatar } from "~/helpers/api/editAvatar";
+import { editProfile } from "~/helpers/api/editProfile";
 
 export default function Profile() {
   const { userIdFromUrl } = useParams();
@@ -184,6 +184,8 @@ export default function Profile() {
                             setCountFollowers(countFollowers - 1);
                           }
                     }
+                    isHref={false}
+                    href=""
                   />
                 ) : (
                   <MainBtnAlt
@@ -194,10 +196,18 @@ export default function Profile() {
                       Cookies.remove("UID");
                       window.location.pathname = "/register";
                     }}
+                    isHref={false}
+                    href=""
                   />
                 )}
                 {Cookies.get("UID") != userIdFromUrl ? (
-                  <MainBtn textBtn="message" colorBtn="white" />
+                  <MainBtn
+                    textBtn="message"
+                    colorBtn="white"
+                    isHref={true}
+                    href={`/chats/${userIdFromUrl}`}
+                    onClick={() => {}}
+                  />
                 ) : null}
               </div>
             </div>

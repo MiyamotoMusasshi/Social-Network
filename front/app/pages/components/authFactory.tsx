@@ -1,5 +1,5 @@
 import Submit from "../UI/Submit";
-import { handleSubmit } from "~/api/handleSubmit";
+import { handleSubmit } from "~/helpers/api/handleSubmit";
 import { useFetcher } from "react-router";
 import { Activity, useState } from "react";
 import type { AuthFactoryProps } from "../props/AuthFactoryProps";

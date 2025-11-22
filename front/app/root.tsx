@@ -10,9 +10,8 @@ import {
 import type { Route } from "./+types/root";
 import "./app.css";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router";
 import Cookies from "js-cookie";
-import axios from "axios";
+import { socket } from "app/helpers/socket";
 import { useCustomFetch } from "./hooks/useCustomFetch";
 
 export const links: Route.LinksFunction = () => [
@@ -70,9 +69,14 @@ export default function App() {
           window.location.pathname == "/register")
       ) {
         window.location.pathname = "/";
+      } else {
+        socket.on("error", (error) => {
+          console.log(error);
+        });
       }
     }
   }, [data]);
+
   return <Outlet />;
 }
 

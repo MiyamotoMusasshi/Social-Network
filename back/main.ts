@@ -10,10 +10,6 @@ dotenv.config();
 
 const PORT = process.env.PORT;
 
-// websocketServer.on("connection", (websocketMsg) => {
-//   websocketMsg.send("connect");
-// });
-
 httpServer.listen(PORT, () => {
   console.log("http server started");
 });
@@ -34,3 +30,10 @@ await redisClient
     console.log("connected Redis");
   })
   .catch((err) => console.log(err));
+
+await redisClient
+  .flushAll()
+  .then(() => {
+    console.log("redis has been removed");
+  })
+  .catch((err) => console.error(err));
