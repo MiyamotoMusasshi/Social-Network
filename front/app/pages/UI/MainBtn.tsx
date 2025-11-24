@@ -10,6 +10,7 @@ export default function MainBtn({
   return (
     <button
       className="main"
+      type="button"
       style={{ backgroundColor: colorBtn }}
       onClick={onClick}
     >

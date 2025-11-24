@@ -10,6 +10,7 @@ export default function MainBtn({
   return (
     <button
       className="border-soild border alt"
+      type="button"
       style={{ borderColor: colorBtn }}
       onClick={onClick}
     >

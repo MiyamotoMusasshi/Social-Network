@@ -5,19 +5,22 @@ export default function message(
   uidSendler: string | undefined
 ) {
   const typedMessage: any = document.querySelector("#typed-message");
-  const msgList = document.querySelector("#msg-list");
 
   if (typedMessage.value != "") {
     socket.emit("message", {
       uidRecipient: uidRecipient,
       uidSendler: uidSendler,
       message: typedMessage.value,
+      date: {
+        hours: new Date().getHours(),
+        minutes: new Date().getMinutes(),
+        day: new Date().getDate(),
+        month: new Date().getMonth(),
+        year: new Date().getFullYear(),
+      },
+      dateForSorting: new Date().getTime(),
     });
 
     typedMessage.value = "";
-
-    setTimeout(() => {
-      msgList ? (msgList.scrollTop = msgList.scrollHeight) : "";
-    }, 100);
   }
 }

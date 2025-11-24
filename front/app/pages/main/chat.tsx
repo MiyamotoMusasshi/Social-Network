@@ -3,80 +3,126 @@ import message from "~/helpers/message";
 import { data, useParams } from "react-router";
 import Cookies from "js-cookie";
 import { socket } from "~/helpers/socket";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import { useCustomFetch } from "~/hooks/useCustomFetch";
+import Loading from "../UI/Loading";
 
 export default function Chat() {
   const { userIdFromUrl } = useParams();
 
+  const messagesEndRef = useRef<any>(null);
+
+  const { data, loading } = useCustomFetch("http://localhost:5000/chat", {
+    userIdFromUrl: userIdFromUrl,
+    uid: Cookies.get("UID"),
+  });
+
   const [newMessageInterlocutor, setNewMessageInterlocutor] = useState<
-    string[]
+    messageFromServer[]
   >([]);
-  const [newMyMessage, setNewMyMessage] = useState<string[]>([]);
+  const [newMyMessage, setNewMyMessage] = useState<messageFromServer[]>([]);
+
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [data, newMessageInterlocutor, newMyMessage]);
 
   useEffect(() => {
     socket.on("recipient", (data) => {
       setNewMessageInterlocutor((prev) => {
         const cloneArray = [...prev];
-        cloneArray.push(data.msg);
+        cloneArray.push(data);
         return cloneArray;
       });
     });
-  }, [data]);
 
-  useEffect(() => {
     socket.on("sendler", (data) => {
       setNewMyMessage((prev) => {
         const cloneArray = [...prev];
-        cloneArray.push(data.msg);
+        cloneArray.push(data);
         return cloneArray;
       });
     });
-  }, [data]);
+  }, []);
+
   return (
     <div className="w-[75%]">
-      <div className="flex gap-[20px] justify-center items-center w-full border-b border-b-solid border-b-white h-[70px] cursor-pointer hover:opacity-[0.7]">
+      <div
+        className="flex gap-[20px] justify-center items-center w-full border-b border-b-solid border-b-white h-[70px] cursor-pointer hover:opacity-[0.7]"
+        onClick={() => {
+          window.location.href = "/profile/" + userIdFromUrl;
+        }}
+      >
         <div className="flex">
           <img
-            src="https://png.pngtree.com/thumb_back/fh260/background/20230516/pngtree-avatar-of-a-man-wearing-sunglasses-image_2569096.jpg"
+            src={loading ? "http://localhost:5000/img/avatar.png" : data.avatar}
             alt=""
             className="w-[50px] h-[50px] rounded-full border-white border-solid border"
           />
           <div
             className="rounded-full w-[10px] h-[10px] mt-auto"
-            style={{ backgroundColor: "red" }}
+            style={{
+              backgroundColor: loading || data?.isOnline ? "green" : "red",
+            }}
           ></div>
         </div>
-        <p className="text-3xl">pidor</p>
+        {!loading ? <p className="text-3xl">{data.username}</p> : <Loading />}
       </div>
       <ul className="p-[30px] msg-list h-[80%]" id="msg-list">
-        <li className="flex mb-[20px]">
-          <div className="border border-solid border-white rounded-4xl p-[10px] bg-white">
-            <span className="text-black">hello drughello drughello drug</span>
-          </div>
-        </li>
-        <li className="flex mb-[20px]">
-          <div className="border border-solid border-white rounded-4xl p-[10px] ml-auto">
-            <span>hello drughello drughello drug</span>
-          </div>
-        </li>
+        {!loading
+          ? data.messages
+            ? data.messages.map((msg: any, index: any) =>
+                msg.uid != userIdFromUrl ? (
+                  <li
+                    className="flex mb-[20px] flex-col items-start"
+                    key={index}
+                  >
+                    <div className="border border-solid border-white rounded-4xl p-[10px] bg-white">
+                      <span className="text-black">{msg.message}</span>
+                    </div>
+                    <p className="pl-[12px] text-sm text-gray-400 mt-[5px]">
+                      {msg.date}
+                    </p>
+                  </li>
+                ) : (
+                  <li className="flex mb-[20px] flex-col" key={index}>
+                    <div className="border border-solid border-white rounded-4xl p-[10px] ml-auto">
+                      <span>{msg.message}</span>
+                    </div>
+                    <p className="pr-[12px] text-sm text-gray-400 mt-[5px] ml-auto">
+                      {msg.date}
+                    </p>
+                  </li>
+                )
+              )
+            : ""
+          : ""}
         {newMessageInterlocutor.length != 0
           ? newMessageInterlocutor.map((msg, index) => (
-              <li className="flex mb-[20px]" key={index}>
+              <li className="flex mb-[20px] flex-col items-start" key={index}>
                 <div className="border border-solid border-white rounded-4xl p-[10px] bg-white">
-                  <span className="text-black">{msg}</span>
+                  <span className="text-black">{msg.msg}</span>
                 </div>
+                <p className="pl-[12px] text-sm text-gray-400 mt-[5px]">
+                  {msg.date}
+                </p>
               </li>
             ))
           : ""}
         {newMyMessage.length != 0
           ? newMyMessage.map((msg, index) => (
-              <li className="flex mb-[20px]" key={index}>
+              <li className="flex mb-[20px] flex-col" key={index}>
                 <div className="border border-solid border-white rounded-4xl p-[10px] ml-auto">
-                  <span>{msg}</span>
+                  <span>{msg.msg}</span>
                 </div>
+                <p className="pr-[12px] text-sm text-gray-400 mt-[5px] ml-auto">
+                  {msg.date}
+                </p>
               </li>
             ))
           : ""}
+        <div ref={messagesEndRef}></div>
       </ul>
       <div className="p-[20px] border-t border-t-solid border-t-white flex gap-[20px] justify-center items-center">
         <input
@@ -100,4 +146,9 @@ export default function Chat() {
       </div>
     </div>
   );
+}
+
+interface messageFromServer {
+  msg: string;
+  date: string;
 }
