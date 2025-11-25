@@ -8,6 +8,7 @@ import { upload } from "./localStorage.ts";
 import changeAvatar from "./posts/changeAvatar.ts";
 import changeProfile from "./posts/changeProfile.ts";
 import chat from "./posts/chat.ts";
+import chats from "./posts/chats.ts";
 
 app.post("/register", registration);
 app.post("/login", authorization);
@@ -18,5 +19,6 @@ app.post("/un-follow", Following.unFollow);
 app.post("/change-avatar", upload.single("avatar"), changeAvatar);
 app.post("/change-profile", changeProfile);
 app.post("/chat", chat);
+app.post("/chats", chats);
 
 export default app.post;

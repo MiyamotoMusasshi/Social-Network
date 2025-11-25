@@ -5,6 +5,7 @@ import push from "./helpersDataBase/push.ts";
 import random from "random";
 import boolenCheckMoreCondition from "./helpersDataBase/boolenCheckMoreCondition.ts";
 import checkMoreCondition from "./helpersDataBase/checkMoreCondition.ts";
+import boolenCheck from "./helpersDataBase/boolenCheck.ts";
 
 enum Month {
   "January",
@@ -85,16 +86,23 @@ websocketServer.on("connection", async (socketConnected) => {
       Month[data.date.month]
     } ${data.date.hours}.${data.date.minutes}`;
 
-    isRecipientOnline
-      ? websocketServer
-          .to(Recipient)
-          .emit("recipient", { msg: data.message, date: dateMsg })
-      : false;
-    isSendlerOnline
-      ? websocketServer
-          .to(Sendler)
-          .emit("sendler", { msg: data.message, date: dateMsg })
-      : false;
+    if (isRecipientOnline) {
+      websocketServer
+        .to(Recipient)
+        .emit("recipient", { message: data.message, date: dateMsg });
+
+      websocketServer
+        .to(Recipient)
+        .emit("lastMsg", { message: data.message, uid: data.uidRecipient });
+    }
+    if (isSendlerOnline) {
+      websocketServer
+        .to(Sendler)
+        .emit("sendler", { message: data.message, date: dateMsg });
+      websocketServer
+        .to(Sendler)
+        .emit("lastMsg", { message: data.message, uid: data.uidRecipient });
+    }
 
     const isDialog = await boolenCheckMoreCondition(
       "dialogs",
@@ -104,7 +112,23 @@ websocketServer.on("connection", async (socketConnected) => {
     );
 
     if (!isDialog) {
-      const chatId = random.int(0, 999999);
+      let chatId = random.int(0, 999999);
+      let chekedChatId = await boolenCheck(
+        "dialogs",
+        "chat_id",
+        "chat_id",
+        chatId
+      );
+
+      while (chekedChatId) {
+        chatId = random.int(0, 999999);
+        chekedChatId = await boolenCheck(
+          "dialogs",
+          "chat_id",
+          "chat_id",
+          chatId
+        );
+      }
 
       push(
         "dialogs",
@@ -119,13 +143,14 @@ websocketServer.on("connection", async (socketConnected) => {
 
       push(
         "messages_between_users",
-        ["uid", "senderId", "message", "date", "chat_id"],
+        ["uid", "senderId", "message", "date", "chat_id", "date_for_sorting"],
         [
           Number(data.uidRecipient),
           Number(data.uidSendler),
           data.message,
           dateMsg,
           chatId,
+          String(data.dateForSorting),
         ]
       );
     } else {
@@ -138,13 +163,14 @@ websocketServer.on("connection", async (socketConnected) => {
 
       push(
         "messages_between_users",
-        ["uid", "senderId", "message", "date", "chat_id"],
+        ["uid", "senderId", "message", "date", "chat_id", "date_for_sorting"],
         [
           Number(data.uidRecipient),
           Number(data.uidSendler),
           data.message,
           dateMsg,
           chatId.chat_id,
+          String(data.dateForSorting),
         ]
       );
     }

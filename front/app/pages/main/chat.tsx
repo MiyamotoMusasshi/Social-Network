@@ -12,15 +12,24 @@ export default function Chat() {
 
   const messagesEndRef = useRef<any>(null);
 
-  const { data, loading } = useCustomFetch("http://localhost:5000/chat", {
-    userIdFromUrl: userIdFromUrl,
-    uid: Cookies.get("UID"),
-  });
+  const { data, loading } = useCustomFetch(
+    "http://localhost:5000/chat",
+    {
+      userIdFromUrl: userIdFromUrl,
+      uid: Cookies.get("UID"),
+    },
+    userIdFromUrl
+  );
 
   const [newMessageInterlocutor, setNewMessageInterlocutor] = useState<
     messageFromServer[]
   >([]);
   const [newMyMessage, setNewMyMessage] = useState<messageFromServer[]>([]);
+
+  useEffect(() => {
+    setNewMessageInterlocutor([]);
+    setNewMyMessage([]);
+  }, [userIdFromUrl]);
 
   useEffect(() => {
     if (messagesEndRef.current) {
@@ -78,7 +87,10 @@ export default function Chat() {
                     className="flex mb-[20px] flex-col items-start"
                     key={index}
                   >
-                    <div className="border border-solid border-white rounded-4xl p-[10px] bg-white">
+                    <div
+                      className="border border-solid border-white rounded-4xl p-[10px] bg-white max-w-[100%]"
+                      style={{ wordWrap: "break-word" }}
+                    >
                       <span className="text-black">{msg.message}</span>
                     </div>
                     <p className="pl-[12px] text-sm text-gray-400 mt-[5px]">
@@ -87,7 +99,10 @@ export default function Chat() {
                   </li>
                 ) : (
                   <li className="flex mb-[20px] flex-col" key={index}>
-                    <div className="border border-solid border-white rounded-4xl p-[10px] ml-auto">
+                    <div
+                      className="border border-solid border-white rounded-4xl p-[10px] ml-auto max-w-[100%]"
+                      style={{ wordWrap: "break-word" }}
+                    >
                       <span>{msg.message}</span>
                     </div>
                     <p className="pr-[12px] text-sm text-gray-400 mt-[5px] ml-auto">
@@ -101,8 +116,11 @@ export default function Chat() {
         {newMessageInterlocutor.length != 0
           ? newMessageInterlocutor.map((msg, index) => (
               <li className="flex mb-[20px] flex-col items-start" key={index}>
-                <div className="border border-solid border-white rounded-4xl p-[10px] bg-white">
-                  <span className="text-black">{msg.msg}</span>
+                <div
+                  className="border border-solid border-white rounded-4xl p-[10px] bg-white max-w-[100%]"
+                  style={{ wordWrap: "break-word" }}
+                >
+                  <span className="text-black">{msg.message}</span>
                 </div>
                 <p className="pl-[12px] text-sm text-gray-400 mt-[5px]">
                   {msg.date}
@@ -113,8 +131,11 @@ export default function Chat() {
         {newMyMessage.length != 0
           ? newMyMessage.map((msg, index) => (
               <li className="flex mb-[20px] flex-col" key={index}>
-                <div className="border border-solid border-white rounded-4xl p-[10px] ml-auto">
-                  <span>{msg.msg}</span>
+                <div
+                  className="border border-solid border-white rounded-4xl p-[10px] ml-auto max-w-[100%]"
+                  style={{ wordWrap: "break-word" }}
+                >
+                  <span>{msg.message}</span>
                 </div>
                 <p className="pr-[12px] text-sm text-gray-400 mt-[5px] ml-auto">
                   {msg.date}
@@ -149,6 +170,11 @@ export default function Chat() {
 }
 
 interface messageFromServer {
-  msg: string;
+  message: string;
   date: string;
+}
+
+interface messages extends messageFromServer {
+  uid: string;
+  senderId: string;
 }

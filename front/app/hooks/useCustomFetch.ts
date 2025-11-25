@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-export const useCustomFetch = (url: string, sendedData: Object) => {
+export const useCustomFetch = (
+  url: string,
+  sendedData: Object,
+  isUserIdFromUrl: string = ""
+) => {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -21,7 +25,7 @@ export const useCustomFetch = (url: string, sendedData: Object) => {
         setError(err);
         setLoading(false);
       });
-  }, []);
+  }, [isUserIdFromUrl]);
 
   return { data, loading, error };
 };
