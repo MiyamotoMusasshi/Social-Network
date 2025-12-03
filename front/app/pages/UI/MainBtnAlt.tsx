@@ -1,6 +1,6 @@
 import "app/pages/styles/main-btn.css";
 
-export default function MainBtn({
+export default function MainBtnALt({
   textBtn,
   colorBtn,
   onClick,

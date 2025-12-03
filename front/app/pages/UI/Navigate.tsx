@@ -12,7 +12,10 @@ export default function Navigate() {
       <ul>
         {links.map(({ href, to, key }) => (
           <li key={key} className="mb-[10px] hover:opacity-[0.7]">
-            <a href={key == 0 ? href + uid : href} className="text-xl">
+            <a
+              href={key == 0 || key == 3 || key == 5 ? href + uid : href}
+              className="text-xl"
+            >
               {to}
             </a>
           </li>
@@ -39,9 +42,14 @@ const links = [
     key: 2,
   },
   {
-    href: "/",
-    to: "Friends",
+    href: `/followers/`,
+    to: "Followers",
     key: 3,
+  },
+  {
+    href: `/following/`,
+    to: "Following",
+    key: 5,
   },
   {
     href: "/",

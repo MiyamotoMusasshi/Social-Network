@@ -8,6 +8,10 @@ import {
 export default [
   index("./pages/main/main.tsx"),
   route("/profile/:userIdFromUrl", "./pages/main/profile.tsx"),
+  layout("./pages/components/followLayout.tsx", [
+    route("/followers/:userIdFromUrl", "./pages/main/followers.tsx"),
+    route("/following/:userIdFromUrl", "./pages/main/following.tsx"),
+  ]),
   layout("./pages/components/authLayout.tsx", [
     route("register", "./pages/main/registration.tsx"),
     route("login", "./pages/main/authorization.tsx"),

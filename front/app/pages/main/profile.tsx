@@ -135,14 +135,20 @@ export default function Profile() {
               </div>
               <div className="mt-[10px] flex gap-[20px] items-center jusify-center">
                 {!loading ? (
-                  <a className="text-sm text-gray-500 cursor-pointer hover:opacity-[0.7]">
+                  <a
+                    className="text-sm text-gray-500 cursor-pointer hover:opacity-[0.7]"
+                    href={`/followers/${userIdFromUrl}`}
+                  >
                     Followers: {" " + countFollowers}
                   </a>
                 ) : (
                   <Loading />
                 )}
                 {!loading ? (
-                  <a className="text-sm text-gray-500 cursor-pointer hover:opacity-[0.7]">
+                  <a
+                    className="text-sm text-gray-500 cursor-pointer hover:opacity-[0.7]"
+                    href={`/following/${userIdFromUrl}`}
+                  >
                     Following:{" "}
                     {data && data.following != null
                       ? "" + data.following

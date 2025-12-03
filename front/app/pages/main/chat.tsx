@@ -55,6 +55,10 @@ export default function Chat() {
     });
   }, []);
 
+  if (userIdFromUrl == Cookies.get("UID")) {
+    window.location.href = "/chats";
+  }
+
   return (
     <div className="w-[75%]">
       <div
